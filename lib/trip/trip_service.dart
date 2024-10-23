@@ -8,18 +8,21 @@ class TripService {
     var tripList = List<Trip>.empty();
     final loggedUser = UserSession.getLoggedInUser();
     var isFriend = false;
-
-    for (User friend in user.getFriends) {
-      if (friend == loggedUser) {
-        isFriend = true;
-        break;
+    if (loggedUser != null) {
+      for (User friend in user.getFriends) {
+        if (friend == loggedUser) {
+          isFriend = true;
+          break;
+        }
       }
-    }
 
-    if (isFriend) {
-      tripList = TripDAO.findTripsByUser(user);
-    }
+      if (isFriend) {
+        tripList = TripDAO.findTripsByUser(user);
+      }
 
-    return tripList;
+      return tripList;
+    } else {
+      throw Exception('User not logged in');
+    }
   }
 }
